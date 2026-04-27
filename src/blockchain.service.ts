@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 @Injectable()
 export class BlockchainService {
   private provider = new ethers.providers.JsonRpcProvider(
-    "http://127.0.0.1:8545",
+    "https://rpc-amoy.polygon.technology"
   );
 
   private wallet = new ethers.Wallet(
@@ -12,7 +12,7 @@ export class BlockchainService {
     this.provider,
   );
 
-  private contractAddress =  "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+  private contractAddress = "0xCFA9Cf39E2d9529B6362568417A4654fe44CB622";
 ;
 
   private treasuryAddress = "0x851356ae760d987E095750cCeb3bC6014560891C";

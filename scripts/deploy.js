@@ -6,7 +6,9 @@ async function main() {
   console.log("Déploiement avec :", deployer.address);
 
   const Token = await hre.ethers.getContractFactory("IMTToken");
-  const token = await Token.deploy(deployer.address);
+  const token = await Token.deploy(deployer.address, {
+  gasLimit: 3000000,
+});
 
   await token.deployed();
 
