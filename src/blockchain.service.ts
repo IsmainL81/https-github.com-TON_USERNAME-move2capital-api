@@ -69,7 +69,12 @@ export class BlockchainService {
   }
 
   async getBalance(address: string) {
+  try {
     const balance = await this.contract.balanceOf(address);
     return ethers.utils.formatUnits(balance, 18);
+  } catch (error: any) {
+    console.error("BALANCE ERROR:", error);
+    throw error;
   }
+}
 }
