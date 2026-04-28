@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 @Injectable()
 export class BlockchainService {
   private provider = new ethers.providers.StaticJsonRpcProvider(
-  "https://polygon-amoy-bor-rpc.publicnode.com",
+  "https://rpc.ankr.com/polygon_amoy",
   {
     name: "polygon-amoy",
     chainId: 80002,
@@ -28,10 +28,10 @@ export class BlockchainService {
   ];
 
   private contract = new ethers.Contract(
-    this.contractAddress,
-    this.abi,
-    this.wallet,
-  );
+  this.contractAddress,
+  this.abi,
+  this.provider
+);
 
   async mint(to: string, amount: number) {
     const activityId = ethers.utils.id(`${Date.now()}-${to}-${amount}`);
