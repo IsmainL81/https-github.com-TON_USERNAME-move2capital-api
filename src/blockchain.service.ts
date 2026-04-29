@@ -4,7 +4,7 @@ import { ethers } from "ethers";
 @Injectable()
 export class BlockchainService {
   private provider = new ethers.providers.StaticJsonRpcProvider(
-  "https://rpc.ankr.com/polygon_amoy",
+  "https://polygon-amoy.g.alchemy.com/v2/gjS6ZpkJVusTxe3e-rpAZ",
   {
     name: "polygon-amoy",
     chainId: 80002,
