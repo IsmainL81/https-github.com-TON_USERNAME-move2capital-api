@@ -12,9 +12,9 @@ export class BlockchainService {
 );
 
   private wallet = new ethers.Wallet(
-    "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
-    this.provider,
-  );
+  process.env.PRIVATE_KEY!,
+  this.provider,
+);
 
   private contractAddress = "0xCFA9Cf39E2d9529B6362568417A4654fe44CB622";
 ;
@@ -30,7 +30,7 @@ export class BlockchainService {
   private contract = new ethers.Contract(
   this.contractAddress,
   this.abi,
-  this.provider
+  this.wallet,
 );
 
   async mint(to: string, amount: number) {
