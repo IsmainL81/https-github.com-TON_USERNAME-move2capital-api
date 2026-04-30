@@ -37,10 +37,14 @@ export class BlockchainService {
     const activityId = ethers.utils.id(`${Date.now()}-${to}-${amount}`);
 
     const tx = await this.contract.mintForActivity(
-      to,
-      ethers.utils.parseUnits(amount.toString(), 18),
-      activityId,
-    );
+  to,
+  ethers.utils.parseUnits(amount.toString(), 18),
+  activityId,
+  {
+    maxFeePerGas: ethers.utils.parseUnits("60", "gwei"),
+    maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"),
+  },
+);
 
     const receipt = await tx.wait();
 
@@ -55,10 +59,14 @@ export class BlockchainService {
 
   async spend(from: string, amount: number) {
     const tx = await this.contract.spend(
-      from,
-      this.treasuryAddress,
-      ethers.utils.parseUnits(amount.toString(), 18),
-    );
+  from,
+  this.treasuryAddress,
+  ethers.utils.parseUnits(amount.toString(), 18),
+  {
+    maxFeePerGas: ethers.utils.parseUnits("60", "gwei"),
+    maxPriorityFeePerGas: ethers.utils.parseUnits("30", "gwei"),
+  },
+);
 
     const receipt = await tx.wait();
 
