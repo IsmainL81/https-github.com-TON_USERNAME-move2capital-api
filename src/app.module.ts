@@ -7,16 +7,17 @@ import { Activity } from "./activity.entity";
 import { User } from "./user.entity";
 import { Mint } from "./mint.entity";
 import { Purchase } from "./purchase.entity";
+import { DailyActivity } from "./daily-activity.entity";
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: "sqlite",
       database: "move2capital.db",
-      entities: [Activity, User, Mint, Purchase],
+      entities: [Activity, User, Mint, Purchase, DailyActivity],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Activity, User, Mint, Purchase]),
+    TypeOrmModule.forFeature([Activity, User, Mint, Purchase, DailyActivity]),
   ],
   controllers: [AppController],
   providers: [AppService, BlockchainService],
