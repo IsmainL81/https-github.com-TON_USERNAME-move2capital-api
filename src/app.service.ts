@@ -5,6 +5,7 @@ import { Activity } from "./activity.entity";
 import { Mint } from "./mint.entity";
 import { User } from "./user.entity";
 import { Purchase } from "./purchase.entity";
+import { DailyActivity } from "./daily-activity.entity";
 
 @Injectable()
 export class AppService {
@@ -22,6 +23,9 @@ export class AppService {
 
     @InjectRepository(Purchase)
     private purchaseRepo: Repository<Purchase>,
+
+    @InjectRepository(DailyActivity)
+    private dailyActivityRepo: Repository<DailyActivity>,
   ) {}
 
   getHello() {
@@ -77,6 +81,65 @@ export class AppService {
       cap: 500,
     };
   }
+
+  async validateDailySteps(wallet: string, steps: number) {
+  const today = new Date().toISOString().slice(0, 10);
+
+  let activity = await this.dailyActivityRepo.findOne({
+    where: { wallet, date: today },
+  });
+
+  if (!activity) {
+    activity = this.dailyActivityRepo.create({
+      wallet,
+      date: today,
+      steps: 0,
+      mintedIMT: 0,
+    });
+  }
+
+  if (steps <= activity.steps) {
+    return {
+      accepted: false,
+      reason: "Aucun nouveau pas",
+      mintableIMT: 0,
+      deltaSteps: 0,
+      activity,
+    };
+  }
+
+  const deltaSteps = steps - activity.steps;
+
+  // 1000 pas = 1 IMT
+  const calculatedIMT = Math.floor(deltaSteps / 1000);
+
+  const dailyCap = 20;
+  const remaining = dailyCap - activity.mintedIMT;
+
+  const mintableIMT = Math.min(calculatedIMT, remaining);
+
+  if (mintableIMT <= 0) {
+    return {
+      accepted: false,
+      reason: "Cap journalier atteint",
+      mintableIMT: 0,
+      deltaSteps,
+      activity,
+    };
+  }
+
+  activity.steps = steps;
+  activity.mintedIMT += mintableIMT;
+
+  await this.dailyActivityRepo.save(activity);
+
+  return {
+    accepted: true,
+    mintableIMT,
+    deltaSteps,
+    activity,
+  };
+}
 
   // ---------------- GAMIFICATION ----------------
 
